@@ -1,0 +1,5 @@
+{
+    "AppURL": ":10000",
+    "DbURL": "root:0IBelieveInYesterday@tcp(127.0.0.1:3306)/",
+    "DbName": "test"
+}
