@@ -4,6 +4,9 @@ import (
 	"bc_node_api/api3/commons"
 	"database/sql"
 	"fmt"
+
+	// Used in conjunction with database/sql
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const keyTableName = "keys"
@@ -117,4 +120,5 @@ func KeyShareConfirmGetDb(_type string, hash string, state string, dbConf common
 	}
 
 	return xPubS
+
 }

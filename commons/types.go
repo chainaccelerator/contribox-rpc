@@ -1,11 +1,39 @@
 package commons
 
+// BlindingKey ...
+type BlindingKey struct {
+	Key string
+}
+
+// BlindingKeyEncrypted ...
+type BlindingKeyEncrypted struct {
+	XPub   XPub
+	String string
+}
+
 // Boarding ...
 type Boarding struct {
 	XPubList            []XPub
 	In                  bool
 	GroupRoleNameList   []GroupRoleName
 	GroupActionNameList []GroupActionName
+}
+
+// Contribution ...
+type Contribution struct {
+	Hash            Hash
+	Proof           Proof
+	Template        Template
+	BlindKeyList    []BlindingKeyEncrypted
+	RangeList       []RangeEncrypted
+	OnBoarding      Boarding
+	OutBoarding     Boarding
+	Tx1Id           TxId
+	Tx0IdAmount     int
+	Tx0IdIssueAsset IssueAsset
+	Tx0IdSigA       SigData
+	Vout0PubKA      PubKey
+	Vout1PubKS      PubKey
 }
 
 // GroupActionName ...
@@ -21,6 +49,11 @@ type GroupRoleName struct {
 // Hash ...
 type Hash struct {
 	Hash string
+}
+
+// IssueAsset ...
+type IssueAsset struct {
+	IssueAsset Hash
 }
 
 // Key ...
@@ -86,9 +119,28 @@ type PubKey struct {
 	Base58Encoded bool
 }
 
+// Range ...
+type Range struct {
+	Min int
+	Max int
+}
+
+// RangeEncrypted ...
+type RangeEncrypted struct {
+	XPub   XPub
+	String string
+}
+
 // Script ...
 type Script struct {
 	Script string
+}
+
+// Sig ...
+type Sig struct {
+	Sig   SigData
+	XPub  XPub
+	XPubS XPub
 }
 
 // SigData ...

@@ -2,7 +2,7 @@ package authentication
 
 import "bc_node_api/api3/commons"
 
-func authPeerListGetParamConvert(params ...interface{}) (MetaData, string, []interface{}) {
+func authPeerListGetParamConvert(params []interface{}) (MetaData, string, []interface{}) {
 	metaDataParam := params[0].(map[string]interface{})
 
 	timeStampParam := metaDataParam["time"].(map[string]interface{})
@@ -18,12 +18,7 @@ func authPeerListGetParamConvert(params ...interface{}) (MetaData, string, []int
 	pubKey := commons.PubKey{PubKey: pubKeyParam["pubKey"].(string), Base58Encoded: pubKeyParam["base58Encoded"].(bool)}
 
 	sigParam := metaDataParam["sig"].(map[string]interface{})
-	sigDataParam := sigParam["sig"].(map[string]interface{})
-	sig := Sig{
-		Sig:   commons.SigData{Sig: sigDataParam["sig"].(string)},
-		XPub:  commons.XPub{XPub: sigParam["xPub"].(string)},
-		XPubS: commons.XPub{XPub: sigParam["xPubS"].(string)},
-	}
+	sig := commons.BuildSig(sigParam)
 
 	hashParam := metaDataParam["hash"].(map[string]interface{})
 	hash := commons.Hash{Hash: hashParam["hash"].(string)}

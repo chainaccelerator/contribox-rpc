@@ -5,6 +5,7 @@ import (
 	"bc_node_api/api3/boarding"
 	"bc_node_api/api3/commons"
 	"bc_node_api/api3/config"
+	"bc_node_api/api3/contribution"
 	"bc_node_api/api3/key"
 	"encoding/json"
 	"fmt"
@@ -76,23 +77,47 @@ func handleAddress(address string, params []interface{}) (interface{}, bool) {
 
 	case "boardingTemplateGet":
 		projectName, licenceSPDX, groupRoleName, onBoarding, outBoarding, hash, state := boarding.BoardingTemplateGetParamConvert(params)
-		return boarding.BoardingTemplateGet(projectName, licenceSPDX, groupRoleName, onBoarding, outBoarding, hash, state)
+		return boarding.BoardingTemplateGet(projectName, licenceSPDX, groupRoleName, onBoarding, outBoarding, hash, state, dbConf)
 
 	case "boarding":
 		_type, resource, state := boarding.BoardingParamConvert(params)
-		return boarding.Boarding(_type, resource, state)
+		return boarding.Boarding(_type, resource, state, dbConf)
 
 	case "boardingGet":
 		_type, xPubS, state := boarding.BoardingGetParamConvert(params)
-		return boarding.BoardingGet(_type, xPubS, state)
+		return boarding.BoardingGet(_type, xPubS, state, dbConf)
 
 	case "boardingBroadcast":
 		_type, resourceList, hash, state := boarding.BoardingBroadcastParamConvert(params)
-		return boarding.BoardingBroadcast(_type, resourceList, hash, state)
+		return boarding.BoardingBroadcast(_type, resourceList, hash, state, dbConf)
 
 	case "boardingBroadcastGet":
 		_type, hash, state := boarding.BoardingBroadcastGetParamConvert(params)
-		return boarding.BoardingBroadcastGet(_type, hash, state)
+		return boarding.BoardingBroadcastGet(_type, hash, state, dbConf)
+
+	case "contribution":
+		_type, _contribution, state := contribution.ContributionParamConvert(params)
+		return contribution.Contribution(_type, _contribution, state, dbConf)
+
+	case "contributionGet":
+		_type, xPubS, state := contribution.ContributionGetParamConvert(params)
+		return contribution.ContributionGet(_type, xPubS, state, dbConf)
+
+	case "contributionConfirm":
+		_type, sig, hash, state := contribution.ContributionConfirmParamConvert(params)
+		return contribution.ContributionConfirm(_type, sig, hash, state, dbConf)
+
+	case "contributionConfirmGet":
+		_type, hash, state := contribution.ContributionConfirmGetParamConvert(params)
+		return contribution.ContributionConfirmGet(_type, hash, state, dbConf)
+
+	case "contributionBroadcast":
+		_type, resourceList, hash, state := contribution.ContributionBroadcastParamConvert(params)
+		return contribution.ContributionBroadcast(_type, resourceList, hash, state, dbConf)
+
+	case "contributionBroadcastGet":
+		_type, hash, state := contribution.ContributionBroadcastGetParamConvert(params)
+		return contribution.ContributionBroadcastGet(_type, hash, state, dbConf)
 
 	default:
 		return "Address not found", true

@@ -7,7 +7,7 @@ type MetaData struct {
 	Time       commons.TimeStamp
 	PeerList   []string
 	PubKey     commons.PubKey
-	Sig        Sig
+	Sig        commons.Sig
 	Hash       commons.Hash
 	PowDiff    int
 	PowPreffix string
@@ -15,11 +15,4 @@ type MetaData struct {
 	PowHash    commons.Hash
 	Id         string
 	State      string
-}
-
-// Sig ...
-type Sig struct {
-	Sig   commons.SigData
-	XPub  commons.XPub
-	XPubS commons.XPub
 }

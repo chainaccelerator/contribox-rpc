@@ -13,26 +13,37 @@ func BoardingTemplateGet(
 	outBoarding commons.Boarding,
 	hash commons.Hash,
 	state commons.StateReason,
+	dbConf commons.DbConf,
 ) (commons.Template, bool) {
-	return commons.Template{}, true
+	template := BoardingTemplateGetDb(
+		projectName,
+		licenceSPDX,
+		groupRoleName,
+		onBoarding,
+		outBoarding,
+		hash,
+		state,
+		dbConf,
+	)
+	return template, template.GroupRoleName.Name == ""
 }
 
 // Boarding ...
-func Boarding(_type string, resource commons.Template, state commons.StateReason) (commons.StateReason, bool) {
+func Boarding(_type string, resource commons.Template, state commons.StateReason, dbConf commons.DbConf) (commons.StateReason, bool) {
 	return commons.StateReason{}, true
 }
 
 // BoardingGet ...
-func BoardingGet(_type string, xPubS commons.XPub, state commons.StateReason) (commons.Template, bool) {
+func BoardingGet(_type string, xPubS commons.XPub, state commons.StateReason, dbConf commons.DbConf) (commons.Template, bool) {
 	return commons.Template{}, true
 }
 
 // BoardingBroadcast ...
-func BoardingBroadcast(_type string, resourceList []commons.UTXO, hash commons.Hash, state commons.StateReason) (commons.StateReason, bool) {
+func BoardingBroadcast(_type string, resourceList []commons.UTXO, hash commons.Hash, state commons.StateReason, dbConf commons.DbConf) (commons.StateReason, bool) {
 	return commons.StateReason{}, true
 }
 
 // BoardingBroadcastGet ...
-func BoardingBroadcastGet(_type string, hash commons.Hash, state commons.StateReason) (commons.UTXO, bool) {
+func BoardingBroadcastGet(_type string, hash commons.Hash, state commons.StateReason, dbConf commons.DbConf) (commons.UTXO, bool) {
 	return commons.UTXO{}, true
 }
