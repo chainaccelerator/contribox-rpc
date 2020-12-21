@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bc_node_api/api3/blabla"
 	"bc_node_api/api3/boarding"
 	"bc_node_api/api3/commons"
 	"bc_node_api/api3/config"
 	"bc_node_api/api3/contribution"
 	"bc_node_api/api3/key"
+	"bc_node_api/api3/public"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -31,9 +31,6 @@ func main() {
 	dbName = config.DbName
 
 	dbConf = commons.DbConf{DbURL: dbURL, DbName: dbName}
-
-	// Test d'import de package
-	blabla.Blabla()
 
 	requestHandler()
 }
@@ -118,6 +115,10 @@ func handleAddress(address string, params []interface{}) (interface{}, bool) {
 	case "contributionBroadcastGet":
 		_type, hash, state := contribution.ContributionBroadcastGetParamConvert(params)
 		return contribution.ContributionBroadcastGet(_type, hash, state, dbConf)
+
+	case "publicPeerListGet":
+		tagList := public.PublicPeerListGetParamConvert(params)
+		return public.PublicPeerListGet(tagList)
 
 	default:
 		return "Address not found", true
