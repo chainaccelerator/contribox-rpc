@@ -22,6 +22,8 @@ func BoardingTemplateGetDb(
 	xPubList := GetXPubListByTemplateID(template.Id, dbConf)
 	templateDTO := buildTemplateDTO(template, proof, xPubList)
 
+	// Update template data based on onBoarding and outBoarding parameters
+
 	return templateDTO
 }
 

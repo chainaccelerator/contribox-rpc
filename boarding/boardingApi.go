@@ -44,7 +44,8 @@ func BoardingGet(_type string, xPubS commons.XPub, state commons.StateReason, db
 	if !ValidateBoardingGet(_type, xPubS.XPub, state.Reason) {
 		return commons.Template{}, true
 	}
-	return commons.Template{}, false
+	template := BoardingGetDb(_type, xPubS, state, dbConf)
+	return template, false
 }
 
 // BoardingBroadcast ...
