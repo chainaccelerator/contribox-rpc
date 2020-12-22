@@ -36,8 +36,8 @@ type KeyVal struct {
 type Proof struct {
 	Id                int
 	ProjectName       string
-	LicenseSPDX       string
-	LicenseSPDXChange string
+	LicenceSPDX       string
+	LicenceSPDXChange string
 	GroupRoleName     string
 }
 

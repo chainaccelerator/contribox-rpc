@@ -18,13 +18,14 @@ func GetKeyValListByProofID(proofID int, dbConf DbConf) []KeyVal {
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT kv.* FROM %v.%v kv INNER JOIN %v.%v pkv on kv.Id = pkv.keyvalueId WHERE pkv.proofId = %v",
+		"SELECT kv.Id, kv.key, kv.val, kv.keyvalType FROM %v.%v kv INNER JOIN %v.%v pkv on kv.Id = pkv.keyvalId WHERE pkv.proofId = %v",
 		dbConf.DbName,
 		keyValsTableName,
 		dbConf.DbName,
 		proofsAndKeyValsTableName,
 		proofID,
 	)
+	fmt.Println(query)
 
 	results, err := db.Query(query)
 	if err != nil {

@@ -57,13 +57,14 @@ func GetXPubListByTemplateID(templateID int, dbConf DbConf) []XPub {
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT xp.* FROM %v.%v xp INNER JOIN %v.%v txp on xp.Id = txp.xpubId WHERE txp.proofId = %v",
+		"SELECT xp.Id, xp.xPub, xp.xPubType FROM %v.%v xp INNER JOIN %v.%v txp on xp.Id = txp.xpubId WHERE txp.templateId = %v",
 		dbConf.DbName,
 		xPubsTableName,
 		dbConf.DbName,
 		templatesAndXPubsTableName,
 		templateID,
 	)
+	fmt.Println(query)
 
 	results, err := db.Query(query)
 	if err != nil {

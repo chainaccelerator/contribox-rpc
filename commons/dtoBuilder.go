@@ -13,8 +13,8 @@ func BuildProofDTO(proof persistance.Proof, dbConf persistance.DbConf) Proof {
 
 	proofDTO := Proof{
 		ProjectName:       ProjectName{Name: proof.ProjectName},
-		LicenseSPDX:       Licence{SPDX: proof.LicenseSPDX},
-		LicenseSPDXChange: Licence{SPDX: proof.LicenseSPDXChange},
+		LicenseSPDX:       Licence{SPDX: proof.LicenceSPDX},
+		LicenseSPDXChange: Licence{SPDX: proof.LicenceSPDXChange},
 		GroupRoleName:     GroupRoleName{Name: proof.GroupRoleName},
 	}
 

@@ -24,7 +24,10 @@ func GetTemplate(projectName string, licenceSPDX string, groupRoleName string, s
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT t.* FROM %v.%v t WHERE t.projectName = '%v'AND t.licenseSPDX = '%v' AND t.groupRoleName = '%v' AND t.state = '%v'",
+		"SELECT t.Id, t.hash, t.projectName, t.licenceSPDX, t.groupRoleName, t.state, t.userRequirement, t.projectRequirement, "+
+			"t.userUser, t.userBackup, t.userLock, t.userWitness, "+
+			"t.projectOld, t.projectParent, t.projectBoard, t.projectMember, t.projectCosigner, t.projectWitness "+
+			"FROM %v.%v t WHERE t.projectName = '%v' AND t.licenceSPDX = '%v' AND t.groupRoleName = '%v' AND t.state = '%v'",
 		dbConf.DbName,
 		templatesTableName,
 		projectName,
@@ -37,7 +40,26 @@ func GetTemplate(projectName string, licenceSPDX string, groupRoleName string, s
 	var template persistance.Template
 
 	// Si pas possible alors Scan(&template.Id, &template.Hash, etc...)
-	err = db.QueryRow(query).Scan(template)
+	err = db.QueryRow(query).Scan(
+		&template.Id,
+		&template.Hash,
+		&template.ProjectName,
+		&template.LicenceSPDX,
+		&template.GroupRoleName,
+		&template.State,
+		&template.UserRequirement,
+		&template.ProjectRequirement,
+		&template.UserUser,
+		&template.UserBackup,
+		&template.UserLock,
+		&template.UserWitness,
+		&template.ProjectOld,
+		&template.ProjectParent,
+		&template.ProjectBoard,
+		&template.ProjectMember,
+		&template.ProjectCosigner,
+		&template.ProjectWitness,
+	)
 	if err != nil {
 		fmt.Println(err.Error())
 		return persistance.Template{}
@@ -79,6 +101,7 @@ func GetTemplateByTypeXPubAndState(_type string, xPubS string, state string, dbC
 		xPubS,
 		state,
 	)
+	fmt.Println(query)
 
 	var template persistance.Template
 

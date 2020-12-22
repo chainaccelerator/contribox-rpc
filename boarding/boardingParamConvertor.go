@@ -1,6 +1,8 @@
 package boarding
 
-import "bc_node_api/api3/commons"
+import (
+	"bc_node_api/api3/commons"
+)
 
 // BoardingTemplateGetParamConvert ...
 func BoardingTemplateGetParamConvert(params []interface{}) (commons.ProjectName, commons.Licence, commons.GroupRoleName, commons.Boarding, commons.Boarding, commons.Hash, commons.StateReason) {
@@ -8,10 +10,10 @@ func BoardingTemplateGetParamConvert(params []interface{}) (commons.ProjectName,
 	projectName := commons.ProjectName{Name: projectNameParam["name"].(string)}
 
 	licenceSPDXParam := params[1].(map[string]interface{})
-	licenceSPDX := commons.Licence{SPDX: licenceSPDXParam["licenceSPDX"].(string)}
+	licenceSPDX := commons.Licence{SPDX: licenceSPDXParam["SPDX"].(string)}
 
 	groupRoleNameParam := params[2].(map[string]interface{})
-	groupRoleName := commons.GroupRoleName{Name: groupRoleNameParam["groupRoleName"].(string)}
+	groupRoleName := commons.GroupRoleName{Name: groupRoleNameParam["name"].(string)}
 
 	onBoardingParam := params[3].(map[string]interface{})
 	onBoarding := commons.BuildBoarding(onBoardingParam)
