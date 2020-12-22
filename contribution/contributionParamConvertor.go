@@ -107,7 +107,7 @@ func ContributionGetParamConvert(params []interface{}) (string, commons.XPub, co
 }
 
 // ContributionConfirmParamConvert ...
-func ContributionConfirmParamConvert(params []interface{}) (string, commons.Sig, commons.Hash, commons.StateReason) {
+func ContributionConfirmParamConvert(params []interface{}) (string, commons.Sig, commons.Hash, commons.XPub, string, commons.StateReason) {
 	_type := params[0].(string)
 
 	sigParam := params[1].(map[string]interface{})
@@ -116,10 +116,15 @@ func ContributionConfirmParamConvert(params []interface{}) (string, commons.Sig,
 	hashParam := params[2].(map[string]interface{})
 	hash := commons.Hash{Hash: hashParam["hash"].(string)}
 
-	stateParam := params[3].(map[string]interface{})
+	xPubParam := params[3].(map[string]interface{})
+	xPub := commons.XPub{XPub: xPubParam["xPub"].(string)}
+
+	resourceEncrypted := params[4].(string)
+
+	stateParam := params[5].(map[string]interface{})
 	state := commons.StateReason{Reason: stateParam["reason"].(string)}
 
-	return _type, sig, hash, state
+	return _type, sig, hash, xPub, resourceEncrypted, state
 }
 
 // ContributionConfirmGetParamConvert ...

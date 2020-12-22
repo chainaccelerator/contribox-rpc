@@ -7,15 +7,15 @@ import (
 	"fmt"
 )
 
-const boardingTable = "boardings"
-const proofTableName = "proofs"
-const templateTableName = "templates"
-const templateAndProofTableName = "templatesAndProofs"
-const templateAndXPubTableName = "templatesAndXPubs"
-const xPubTableName = "xPubs"
+const boardingsTable = "boardings"
+const proofsTableName = "proofs"
+const templatesTableName = "templates"
+const templatesAndProofsTableName = "templatesAndProofs"
+const templatesAndXPubsTableName = "templatesAndXPubs"
+const xPubsTableName = "xPubs"
 
 // GetTemplate ...
-func GetTemplate(projectName string, licenceSPDX string, groupRoleName string, state string, dbConf commons.DbConf) persistance.Template {
+func GetTemplate(projectName string, licenceSPDX string, groupRoleName string, state string, dbConf persistance.DbConf) persistance.Template {
 	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -26,7 +26,7 @@ func GetTemplate(projectName string, licenceSPDX string, groupRoleName string, s
 	query := fmt.Sprintf(
 		"SELECT t.* FROM %v.%v t WHERE t.projectName = '%v'AND t.licenseSPDX = '%v' AND t.groupRoleName = '%v' AND t.state = '%v'",
 		dbConf.DbName,
-		templateTableName,
+		templatesTableName,
 		projectName,
 		licenceSPDX,
 		groupRoleName,
@@ -47,7 +47,7 @@ func GetTemplate(projectName string, licenceSPDX string, groupRoleName string, s
 }
 
 // UpdateProofBoardings ...
-func UpdateProofBoardings(templateID int, onBoarding commons.Boarding, outBoarding commons.Boarding, dbConf commons.DbConf) bool {
+func UpdateProofBoardings(templateID int, onBoarding commons.Boarding, outBoarding commons.Boarding, dbConf persistance.DbConf) bool {
 	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -59,89 +59,23 @@ func UpdateProofBoardings(templateID int, onBoarding commons.Boarding, outBoardi
 	return true
 }
 
-// GetXPubListByTemplateID ...
-func GetXPubListByTemplateID(templateID int, dbConf commons.DbConf) []persistance.XPub {
-	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
-	if err != nil {
-		fmt.Println(err.Error())
-		return nil
-	}
-	defer db.Close()
-
-	query := fmt.Sprintf(
-		"SELECT xp.* FROM %v.%v xp INNER JOIN %v.%v txp ON xp.id = txp.xPubId WHERE txp.templateId = %v",
-		dbConf.DbName,
-		xPubTableName,
-		dbConf.DbName,
-		templateAndXPubTableName,
-		templateID,
-	)
-
-	results, err := db.Query(query)
-	if err != nil {
-		fmt.Println(err.Error())
-		return nil
-	}
-	fmt.Println(query)
-
-	var xPubList []persistance.XPub
-	for results.Next() {
-		var xPub persistance.XPub
-		err = results.Scan(&xPub.Id, &xPub.XPub, &xPub.XPubType)
-		if err != nil {
-			fmt.Println(err.Error())
-			return nil
-		}
-		xPubList = append(xPubList, xPub)
-	}
-
-	return xPubList
-}
-
-// GetProofByID ...
-func GetProofByID(templateID int, dbConf commons.DbConf) persistance.Proof {
-	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
-	if err != nil {
-		fmt.Println(err.Error())
-		return persistance.Proof{}
-	}
-
-	query := fmt.Sprintf(
-		"SELECT p.* FROM %v.%v p INNER JOIN %v.%v tp ON p.Id = tp.proofId WHERE tp.templateId = '%v",
-		dbConf.DbName,
-		proofTableName,
-		dbConf.DbName,
-		templateAndProofTableName,
-		templateID,
-	)
-
-	var proof persistance.Proof
-
-	err = db.QueryRow(query).Scan(&proof.Id, &proof.LicenseSPDX, &proof.LicenseSPDXChange, &proof.GroupRoleName)
-	if err != nil {
-		fmt.Println(err.Error())
-		return persistance.Proof{}
-	}
-
-	return proof
-}
-
 // GetTemplateByTypeXPubAndState ...
-func GetTemplateByTypeXPubAndState(_type string, xPubS string, state string, dbConf commons.DbConf) persistance.Template {
+func GetTemplateByTypeXPubAndState(_type string, xPubS string, state string, dbConf persistance.DbConf) persistance.Template {
 	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
 	if err != nil {
 		fmt.Println(err.Error())
 		return persistance.Template{}
 	}
+	defer db.Close()
 
 	query := fmt.Sprintf(
 		"SELECT t.* FROM %v.%v t INNER JOIN %v.%v txp ON t.Id = txp.templateId INNER JOIN %v.%v xp ON txp.xPubId = xp.Id WHERE xp.xPub = '%v' AND t.state = '%v'",
 		dbConf.DbName,
-		templateTableName,
+		templatesTableName,
 		dbConf.DbName,
-		templateAndXPubTableName,
+		templatesAndXPubsTableName,
 		dbConf.DbName,
-		xPubTableName,
+		xPubsTableName,
 		xPubS,
 		state,
 	)

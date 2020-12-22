@@ -49,8 +49,8 @@ func ValidateContributionGet(_type string, xPubS string, state string) bool {
 }
 
 // ValidateContributionConfirm ...
-func ValidateContributionConfirm(_type string, sig commons.Sig, hash string, state string) bool {
-	return _type == "default" && commons.ValidateSig(sig) && commons.ValidateKeyOrHash(hash) && state == "done"
+func ValidateContributionConfirm(_type string, sig commons.Sig, hash string, xPub string, state string) bool {
+	return _type == "default" && commons.ValidateSig(sig) && commons.ValidateKeyOrHash(hash) && commons.ValidateXPub(xPub) && state == "done"
 }
 
 // ValidateContributionConfirmGet ...

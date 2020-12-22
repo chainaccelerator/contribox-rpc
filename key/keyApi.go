@@ -1,11 +1,14 @@
 package key
 
-import "bc_node_api/api3/commons"
+import (
+	"bc_node_api/api3/commons"
+	"bc_node_api/api3/persistance"
+)
 
 // Service methods must return primitive types
 
 // KeyShare ...
-func KeyShare(_type string, keyShared commons.KeyShared, state commons.StateReason, dbConf commons.DbConf) (string, bool) {
+func KeyShare(_type string, keyShared commons.KeyShared, state commons.StateReason, dbConf persistance.DbConf) (string, bool) {
 	if !ValidateKeyShare(_type, keyShared.XPubSList, keyShared.Key.Key, keyShared.Hash.Hash, state.Reason) {
 		return "", true
 	}
@@ -19,7 +22,7 @@ func KeyShare(_type string, keyShared commons.KeyShared, state commons.StateReas
 }
 
 // KeyShareGet ...
-func KeyShareGet(_type string, xPubS commons.XPub, state commons.StateReason, dbConf commons.DbConf) (commons.Key, bool) {
+func KeyShareGet(_type string, xPubS commons.XPub, state commons.StateReason, dbConf persistance.DbConf) (commons.Key, bool) {
 	if !ValidateKeyShareGet(_type, xPubS.XPub, state.Reason) {
 		return commons.Key{Key: ""}, true
 	}
@@ -28,7 +31,7 @@ func KeyShareGet(_type string, xPubS commons.XPub, state commons.StateReason, db
 }
 
 // KeyShareConfirm ...
-func KeyShareConfirm(_type string, xPubS commons.XPub, hash commons.Hash, state commons.StateReason, dbConf commons.DbConf) (string, bool) {
+func KeyShareConfirm(_type string, xPubS commons.XPub, hash commons.Hash, state commons.StateReason, dbConf persistance.DbConf) (string, bool) {
 	if !ValidateKeyShareConfirm(_type, xPubS.XPub, hash.Hash, state.Reason) {
 		return "", true
 	}
@@ -37,7 +40,7 @@ func KeyShareConfirm(_type string, xPubS commons.XPub, hash commons.Hash, state 
 }
 
 // KeyShareConfirmGet ...
-func KeyShareConfirmGet(_type string, hash commons.Hash, state commons.StateReason, dbConf commons.DbConf) (commons.XPub, bool) {
+func KeyShareConfirmGet(_type string, hash commons.Hash, state commons.StateReason, dbConf persistance.DbConf) (commons.XPub, bool) {
 	if !ValidateKeyShareConfirmGet(_type, hash.Hash, state.Reason) {
 		return commons.XPub{XPub: ""}, true
 	}

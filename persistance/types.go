@@ -46,6 +46,13 @@ type PubKey struct {
 	Id            int
 	PubKey        string
 	Base58Encoded bool
+	PubKeyType    string
+}
+
+// Tag ...
+type Tag struct {
+	Id  int
+	Tag string
 }
 
 // Template ...

@@ -1,7 +1,7 @@
 package key
 
 import (
-	"bc_node_api/api3/commons"
+	"bc_node_api/api3/persistance"
 	"database/sql"
 	"fmt"
 
@@ -13,7 +13,7 @@ const keyTableName = "keys"
 
 // KeyShareDb ...
 // Create a new key
-func KeyShareDb(_type string, xPubSList []string, key string, hash string, state string, dbConf commons.DbConf) string {
+func KeyShareDb(_type string, xPubSList []string, key string, hash string, state string, dbConf persistance.DbConf) string {
 	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -47,7 +47,7 @@ func KeyShareDb(_type string, xPubSList []string, key string, hash string, state
 
 // KeyShareGetDb ...
 // Get an already existing key
-func KeyShareGetDb(_type string, xPubS string, state string, dbConf commons.DbConf) string {
+func KeyShareGetDb(_type string, xPubS string, state string, dbConf persistance.DbConf) string {
 	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -72,7 +72,7 @@ func KeyShareGetDb(_type string, xPubS string, state string, dbConf commons.DbCo
 
 // KeyShareConfirmDb ...
 // Permet au signataire de confirmer qu'il a reçu la clé
-func KeyShareConfirmDb(_type string, xPubS string, Hash string, state string, dbConf commons.DbConf) string {
+func KeyShareConfirmDb(_type string, xPubS string, Hash string, state string, dbConf persistance.DbConf) string {
 	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -100,7 +100,7 @@ func KeyShareConfirmDb(_type string, xPubS string, Hash string, state string, db
 
 // KeyShareConfirmGetDb ...
 // Allow a user to check whether the key has been well received by the other side
-func KeyShareConfirmGetDb(_type string, hash string, state string, dbConf commons.DbConf) string {
+func KeyShareConfirmGetDb(_type string, hash string, state string, dbConf persistance.DbConf) string {
 	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
 	if err != nil {
 		fmt.Println(err.Error())

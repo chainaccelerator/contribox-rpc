@@ -2,10 +2,10 @@ package main
 
 import (
 	"bc_node_api/api3/boarding"
-	"bc_node_api/api3/commons"
 	"bc_node_api/api3/config"
 	"bc_node_api/api3/contribution"
 	"bc_node_api/api3/key"
+	"bc_node_api/api3/persistance"
 	"bc_node_api/api3/public"
 	"encoding/json"
 	"fmt"
@@ -20,7 +20,7 @@ var appURL string
 var dbURL string
 var dbName string
 
-var dbConf commons.DbConf
+var dbConf persistance.DbConf
 
 func main() {
 	fmt.Println("Blockchain node API")
@@ -30,7 +30,7 @@ func main() {
 	dbURL = config.DbURL
 	dbName = config.DbName
 
-	dbConf = commons.DbConf{DbURL: dbURL, DbName: dbName}
+	dbConf = persistance.DbConf{DbURL: dbURL, DbName: dbName}
 
 	requestHandler()
 }
@@ -101,8 +101,8 @@ func handleAddress(address string, params []interface{}) (interface{}, bool) {
 		return contribution.ContributionGet(_type, xPubS, state, dbConf)
 
 	case "contributionConfirm":
-		_type, sig, hash, state := contribution.ContributionConfirmParamConvert(params)
-		return contribution.ContributionConfirm(_type, sig, hash, state, dbConf)
+		_type, sig, hash, xPub, resourceEncrypted, state := contribution.ContributionConfirmParamConvert(params)
+		return contribution.ContributionConfirm(_type, sig, hash, xPub, resourceEncrypted, state, dbConf)
 
 	case "contributionConfirmGet":
 		_type, hash, state := contribution.ContributionConfirmGetParamConvert(params)

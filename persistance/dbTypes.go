@@ -1,4 +1,4 @@
-package commons
+package persistance
 
 // DbConf ...
 type DbConf struct {
