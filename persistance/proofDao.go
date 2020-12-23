@@ -18,7 +18,7 @@ func GetProofByTemplateID(templateID int, dbConf DbConf) Proof {
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT p.Id, p.licenceSPDX, p.licenceSPDXChange, p.groupRoleName FROM %v.%v p INNER JOIN %v.%v tp ON p.Id = tp.proofId WHERE tp.templateId = %v",
+		"SELECT p.Id, p.xPub, p.projectName, p.licenceSPDX, p.licenceSPDXChange, p.groupRoleName FROM %v.%v p INNER JOIN %v.%v tp ON p.Id = tp.proofId WHERE tp.templateId = %v",
 		dbConf.DbName,
 		proofTableName,
 		dbConf.DbName,
@@ -30,7 +30,7 @@ func GetProofByTemplateID(templateID int, dbConf DbConf) Proof {
 
 	var proof Proof
 
-	err = db.QueryRow(query).Scan(&proof.Id, &proof.LicenceSPDX, &proof.LicenceSPDXChange, &proof.GroupRoleName)
+	err = db.QueryRow(query).Scan(&proof.Id, &proof.XPub, &proof.ProjectName, &proof.LicenceSPDX, &proof.LicenceSPDXChange, &proof.GroupRoleName)
 	if err != nil {
 		fmt.Println(err.Error())
 		return Proof{}

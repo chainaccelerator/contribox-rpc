@@ -12,6 +12,7 @@ func BuildProofDTO(proof persistance.Proof, dbConf persistance.DbConf) Proof {
 	tagList := persistance.GetTagListByProofID(proof.Id, dbConf)
 
 	proofDTO := Proof{
+		XPub:              XPub{XPub: proof.XPub},
 		ProjectName:       ProjectName{Name: proof.ProjectName},
 		LicenseSPDX:       Licence{SPDX: proof.LicenceSPDX},
 		LicenseSPDXChange: Licence{SPDX: proof.LicenceSPDXChange},
@@ -33,8 +34,6 @@ func BuildProofDTO(proof persistance.Proof, dbConf persistance.DbConf) Proof {
 			proofDTO.QualityList = append(proofDTO.QualityList, keyValDTO)
 		case "CONTRIBUTE":
 			proofDTO.ContributeList = append(proofDTO.ContributeList, keyValDTO)
-		case "ORIGIN":
-			proofDTO.OriginList = append(proofDTO.OriginList, keyValDTO)
 		case "NDA":
 			proofDTO.NdaList = append(proofDTO.NdaList, keyValDTO)
 		case "CONFIDENTIALDATA":
@@ -57,6 +56,8 @@ func BuildProofDTO(proof persistance.Proof, dbConf persistance.DbConf) Proof {
 	for _, hash := range hashList {
 		hashDTO := Hash{Hash: hash.Hash}
 		switch hash.HashType {
+		case "ORIGIN":
+			proofDTO.OriginList = append(proofDTO.OriginList, hashDTO)
 		case "PARENT":
 			proofDTO.ParentList = append(proofDTO.ParentList, hashDTO)
 		case "PREVIOUS":

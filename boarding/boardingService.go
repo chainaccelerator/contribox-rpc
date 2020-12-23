@@ -24,6 +24,12 @@ func BoardingTemplateGetDb(
 	return templateDTO
 }
 
+// BoardingDB ...
+func BoardingDB(_type string, resource commons.Template, state string, dbConf persistance.DbConf) commons.StateReason {
+	InsertTemplate(_type, resource, state, dbConf)
+	return commons.StateReason{}
+}
+
 // BoardingGetDb ...
 func BoardingGetDb(_type string, xPubS commons.XPub, state commons.StateReason, dbConf persistance.DbConf) commons.Template {
 	template := GetTemplateByTypeXPubAndState(_type, xPubS.XPub, state.Reason, dbConf)

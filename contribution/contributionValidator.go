@@ -12,7 +12,6 @@ func ValidateContribution(_type string, contribution commons.Contribution, state
 func validateContribution(contribution commons.Contribution) bool {
 	return commons.ValidateKeyOrHash(contribution.Hash.Hash) &&
 		commons.ValidateProof(contribution.Proof) &&
-		commons.ValidateTemplate(contribution.Template) &&
 		validateBlindKeyList(contribution.BlindKeyList) &&
 		validateRangeList(contribution.RangeList) &&
 		commons.ValidateBoarding(contribution.OnBoarding) &&

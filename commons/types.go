@@ -22,8 +22,8 @@ type Boarding struct {
 // Contribution ...
 type Contribution struct {
 	Hash            Hash
+	XPub            XPub
 	Proof           Proof
-	Template        Template
 	BlindKeyList    []BlindingKeyEncrypted
 	RangeList       []RangeEncrypted
 	OnBoarding      Boarding
@@ -34,6 +34,18 @@ type Contribution struct {
 	Tx0IdSigA       SigData
 	Vout0PubKA      PubKey
 	Vout1PubKS      PubKey
+}
+
+// FullContribution ...
+type FullContribution struct {
+	Template Template
+	Contribution
+}
+
+// FullTemplate ...
+type FullTemplate struct {
+	Contribution Contribution
+	Template
 }
 
 // GroupActionName ...
@@ -86,17 +98,19 @@ type ProjectName struct {
 
 // Proof ...
 type Proof struct {
+	XPub                  XPub
 	ProjectName           ProjectName
 	LicenseSPDX           Licence
 	LicenseSPDXChange     Licence
 	GroupRoleName         GroupRoleName
 	DescriptionPublicList []KeyVal
 	IdentityList          []KeyVal
+	Event                 Hash
 	EventList             []KeyVal
 	EnvironmentList       []KeyVal
 	QualityList           []KeyVal
 	ContributeList        []KeyVal
-	OriginList            []KeyVal
+	OriginList            []Hash
 	ParentList            []Hash
 	PreviousList          []Hash
 	LeftList              []Hash

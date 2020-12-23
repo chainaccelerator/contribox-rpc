@@ -10,15 +10,15 @@ func Contribution(_type string, contribution commons.Contribution, state commons
 	if !ValidateContribution(_type, contribution, state.Reason) {
 		return commons.StateReason{}, true
 	}
-	return commons.StateReason{}, false
+	return commons.StateReason{Reason: "todo"}, false
 }
 
 // ContributionGet ...
-func ContributionGet(_type string, xPubS commons.XPub, state commons.StateReason, dbConf persistance.DbConf) (commons.Contribution, bool) {
+func ContributionGet(_type string, xPubS commons.XPub, state commons.StateReason, dbConf persistance.DbConf) (commons.FullContribution, bool) {
 	if !ValidateContributionGet(_type, xPubS.XPub, state.Reason) {
-		return commons.Contribution{}, true
+		return commons.FullContribution{}, true
 	}
-	return commons.Contribution{}, false
+	return ContributionGetDb(_type, xPubS.XPub, state.Reason, dbConf), false
 }
 
 // ContributionConfirm ...
@@ -26,7 +26,7 @@ func ContributionConfirm(_type string, sig commons.Sig, hash commons.Hash, xPub 
 	if !ValidateContributionConfirm(_type, sig, hash.Hash, xPub.XPub, state.Reason) {
 		return commons.Sig{}, true
 	}
-	return commons.Sig{}, false
+	return sig, false
 }
 
 // ContributionConfirmGet ...
@@ -34,7 +34,7 @@ func ContributionConfirmGet(_type string, hash commons.Hash, state commons.State
 	if !ValidateContributionConfirmGet(_type, hash.Hash, state.Reason) {
 		return commons.Sig{}, true
 	}
-	return commons.Sig{}, false
+	return commons.Sig{Sig: commons.SigData{Sig: "mock signature"}, XPub: commons.XPub{XPub: "mock xPub"}, XPubS: commons.XPub{XPub: "mock xPub signer"}}, false
 }
 
 // ContributionBroadcast ...
@@ -42,13 +42,13 @@ func ContributionBroadcast(_type string, resourceList []commons.Contribution, ha
 	if !ValidateContributionBroadcast(_type, resourceList, hash.Hash, state.Reason) {
 		return commons.StateReason{}, true
 	}
-	return commons.StateReason{}, false
+	return commons.StateReason{Reason: "todo"}, false
 }
 
 // ContributionBroadcastGet ...
-func ContributionBroadcastGet(_type string, hash commons.Hash, state commons.StateReason, dbConf persistance.DbConf) (commons.Contribution, bool) {
+func ContributionBroadcastGet(_type string, hash commons.Hash, state commons.StateReason, dbConf persistance.DbConf) (commons.FullContribution, bool) {
 	if !ValidateContributionBroadcastGet(_type, hash.Hash, state.Reason) {
-		return commons.Contribution{}, true
+		return commons.FullContribution{}, true
 	}
-	return commons.Contribution{}, false
+	return ContributionBroadcastGetDb(_type, hash.Hash, state.Reason, dbConf), false
 }

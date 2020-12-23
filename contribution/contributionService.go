@@ -11,19 +11,26 @@ func ContributionDb(_type string, contribution commons.Contribution, state strin
 }
 
 // ContributionGetDb ...
-func ContributionGetDb(_type string, xPubS string, state string, dbConf persistance.DbConf) commons.Contribution {
-	contribution := GetContributionByXPub(_type, xPubS, state, dbConf)
+func ContributionGetDb(_type string, xPubS string, state string, dbConf persistance.DbConf) commons.FullContribution {
+	contribution := GetContributionByXPubAndState(_type, xPubS, state, dbConf)
+	fullContributionDTO := buildContributionDTO(contribution, dbConf)
+	return fullContributionDTO
+}
 
+// ContributionBroadcastGetDb ...
+func ContributionBroadcastGetDb(_type string, hash string, state string, dbConf persistance.DbConf) commons.FullContribution {
+	contribution := GetContributionByHashAndState(_type, hash, state, dbConf)
+	fullContributionDTO := buildContributionDTO(contribution, dbConf)
+	return fullContributionDTO
+}
+
+func buildContributionDTO(contribution persistance.Contribution, dbConf persistance.DbConf) commons.FullContribution {
 	proof := GetProofByContributionID(contribution.Id, dbConf)
 	proofDTO := commons.BuildProofDTO(proof, dbConf)
-
-	template := GetTemplateByContributionID(contribution.Id, dbConf)
-	templateDTO := commons.BuildTemplateDTO(template, dbConf)
 
 	contributionDTO := commons.Contribution{
 		Hash:            commons.Hash{Hash: contribution.Hash},
 		Proof:           proofDTO,
-		Template:        templateDTO,
 		Tx1Id:           commons.TxId{Id: contribution.Tx1Id},
 		Tx0IdAmount:     contribution.Tx0IdAmount,
 		Tx0IdIssueAsset: commons.IssueAsset{IssueAsset: commons.Hash{Hash: contribution.Tx0IdIssueAsset}},
@@ -40,5 +47,13 @@ func ContributionGetDb(_type string, xPubS string, state string, dbConf persista
 		}
 	}
 
-	return contributionDTO
+	template := GetTemplateByContributionID(contribution.Id, dbConf)
+	templateDTO := commons.BuildTemplateDTO(template, dbConf)
+
+	fullContributionDTO := commons.FullContribution{
+		Contribution: contributionDTO,
+		Template:     templateDTO,
+	}
+
+	return fullContributionDTO
 }

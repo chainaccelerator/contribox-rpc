@@ -42,7 +42,7 @@ func BuildProof(proofParameter map[string]interface{}) Proof {
 	contributeList := keyValList(contributeListParam)
 
 	originListParam := proofParameter["originList"].([]interface{})
-	originList := keyValList(originListParam)
+	originList := hashList(originListParam)
 
 	parentListParam := proofParameter["parentList"].([]interface{})
 	parentList := hashList(parentListParam)
@@ -299,7 +299,7 @@ func BuildGetWithXPubParams(params []interface{}) (string, XPub, StateReason) {
 	_type := params[0].(string)
 
 	xPubParam := params[1].(map[string]interface{})
-	xPub := XPub{XPub: xPubParam["hash"].(string)}
+	xPub := XPub{XPub: xPubParam["xPub"].(string)}
 
 	stateParam := params[2].(map[string]interface{})
 	state := StateReason{Reason: stateParam["reason"].(string)}

@@ -68,6 +68,18 @@ func GetTemplate(projectName string, licenceSPDX string, groupRoleName string, s
 	return template
 }
 
+// InsertTemplate ...
+func InsertTemplate(_type string, resource commons.Template, state string, dbConf persistance.DbConf) bool {
+	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	defer db.Close()
+
+	return true
+}
+
 // UpdateProofBoardings ...
 func UpdateProofBoardings(templateID int, onBoarding commons.Boarding, outBoarding commons.Boarding, dbConf persistance.DbConf) bool {
 	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
@@ -91,7 +103,11 @@ func GetTemplateByTypeXPubAndState(_type string, xPubS string, state string, dbC
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT t.* FROM %v.%v t INNER JOIN %v.%v txp ON t.Id = txp.templateId INNER JOIN %v.%v xp ON txp.xPubId = xp.Id WHERE xp.xPub = '%v' AND t.state = '%v'",
+		"SELECT t.Id, t.hash, t.projectName, t.licenceSPDX, t.groupRoleName, t.state, t.userRequirement, t.projectRequirement, "+
+			"t.userUser, t.userBackup, t.userLock, t.userWitness, "+
+			"t.projectOld, t.projectParent, t.projectBoard, t.projectMember, t.projectCosigner, t.projectWitness "+
+			"FROM %v.%v t INNER JOIN %v.%v txp ON t.Id = txp.templateId INNER JOIN %v.%v xp ON txp.xPubId = xp.Id "+
+			"WHERE xp.xPub = '%v' AND t.state = '%v'",
 		dbConf.DbName,
 		templatesTableName,
 		dbConf.DbName,

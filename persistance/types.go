@@ -4,6 +4,7 @@ package persistance
 type Contribution struct {
 	Id              int
 	Hash            string
+	XPub            string
 	Tx1Id           string
 	Tx0IdAmount     int
 	Tx0IdIssueAsset string
@@ -35,6 +36,7 @@ type KeyVal struct {
 // Proof ...
 type Proof struct {
 	Id                int
+	XPub              string
 	ProjectName       string
 	LicenceSPDX       string
 	LicenceSPDXChange string

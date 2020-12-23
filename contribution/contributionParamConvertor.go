@@ -24,9 +24,6 @@ func buildContribution(contributionParam map[string]interface{}) commons.Contrib
 	proofParam := contributionParam["proof"].(map[string]interface{})
 	proof := commons.BuildProof(proofParam)
 
-	templateParam := contributionParam["template"].(map[string]interface{})
-	template := commons.BuildTemplate(templateParam)
-
 	blindingKeyListParam := contributionParam["blindingKeyList"].([]interface{})
 	var blindingKeyList []commons.BlindingKeyEncrypted
 	for _, blindingKeyParam := range blindingKeyListParam {
@@ -87,7 +84,6 @@ func buildContribution(contributionParam map[string]interface{}) commons.Contrib
 	return commons.Contribution{
 		Hash:            hash,
 		Proof:           proof,
-		Template:        template,
 		BlindKeyList:    blindingKeyList,
 		RangeList:       rangeList,
 		OnBoarding:      onBoarding,

@@ -37,7 +37,7 @@ func Boarding(_type string, resource commons.Template, state commons.StateReason
 	if !ValidateBoarding(_type, resource, state.Reason) {
 		return commons.StateReason{}, true
 	}
-	return commons.StateReason{}, false
+	return commons.StateReason{Reason: "todo"}, false
 }
 
 // BoardingGet ...
@@ -54,7 +54,7 @@ func BoardingBroadcast(_type string, resourceList []commons.UTXO, hash commons.H
 	if !ValidateBoardingBroadcast(_type, resourceList, hash.Hash, state.Reason) {
 		return commons.StateReason{}, true
 	}
-	return commons.StateReason{}, false
+	return commons.StateReason{Reason: "done"}, false
 }
 
 // BoardingBroadcastGet ...
@@ -62,5 +62,10 @@ func BoardingBroadcastGet(_type string, hash commons.Hash, state commons.StateRe
 	if !ValidateBoardingBroadcastGet(_type, hash.Hash, state.Reason) {
 		return commons.UTXO{}, true
 	}
-	return commons.UTXO{}, false
+	return commons.UTXO{
+		Hash:   commons.Hash{Hash: "mock utxo hash"},
+		Tx0Id:  commons.TxId{Id: "mock utxo txid"},
+		UTXO:   commons.UTXOData{UTXO: "mock utxodata"},
+		Script: commons.Script{Script: "mock utxo script"},
+	}, false
 }
