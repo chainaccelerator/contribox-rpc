@@ -18,11 +18,9 @@ func GetTagListByProofID(proofID int, dbConf DbConf) []Tag {
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT t.Id, t.tag FROM %v.%v t INNER JOIN %v.%v pt on t.Id = pt.tagId WHERE pt.proofId = %v",
-		dbConf.DbName,
-		tagsTableName,
-		dbConf.DbName,
-		proofsAndTagsTableName,
+		"SELECT t.Id, t.tag FROM %v t INNER JOIN %v pt on t.Id = pt.tagId WHERE pt.proofId = %v",
+		dbConf.DbName+"."+tagsTableName,
+		dbConf.DbName+"."+proofsAndTagsTableName,
 		proofID,
 	)
 	fmt.Println(query)

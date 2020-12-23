@@ -29,7 +29,7 @@ type Hash struct {
 type KeyVal struct {
 	Id         int
 	Key        string
-	Val        map[string]interface{}
+	Val        string
 	KeyValType string
 }
 

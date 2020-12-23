@@ -1,9 +1,12 @@
 package main
 
 import (
+	"bc_node_api/api3/blockchain"
 	"bc_node_api/api3/boarding"
 	"bc_node_api/api3/config"
 	"bc_node_api/api3/contribution"
+	"bc_node_api/api3/git"
+	"bc_node_api/api3/graph"
 	"bc_node_api/api3/key"
 	"bc_node_api/api3/persistance"
 	"bc_node_api/api3/public"
@@ -56,6 +59,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 func handleAddress(address string, params []interface{}) (interface{}, bool) {
 	switch address {
 
+	// Key
 	case "keyShare":
 		_type, keyShared, state := key.KeyShareParamConvert(params)
 		return key.KeyShare(_type, keyShared, state, dbConf)
@@ -72,6 +76,7 @@ func handleAddress(address string, params []interface{}) (interface{}, bool) {
 		_type, hash, state := key.KeyShareConfirmGetParamConvert(params)
 		return key.KeyShareConfirmGet(_type, hash, state, dbConf)
 
+	// Boarding
 	case "boardingTemplateGet":
 		projectName, licenceSPDX, groupRoleName, onBoarding, outBoarding, hash, state := boarding.BoardingTemplateGetParamConvert(params)
 		return boarding.BoardingTemplateGet(projectName, licenceSPDX, groupRoleName, onBoarding, outBoarding, hash, state, dbConf)
@@ -92,6 +97,7 @@ func handleAddress(address string, params []interface{}) (interface{}, bool) {
 		_type, hash, state := boarding.BoardingBroadcastGetParamConvert(params)
 		return boarding.BoardingBroadcastGet(_type, hash, state, dbConf)
 
+	// Contribution
 	case "contribution":
 		_type, _contribution, state := contribution.ContributionParamConvert(params)
 		return contribution.Contribution(_type, _contribution, state, dbConf)
@@ -116,9 +122,43 @@ func handleAddress(address string, params []interface{}) (interface{}, bool) {
 		_type, hash, state := contribution.ContributionBroadcastGetParamConvert(params)
 		return contribution.ContributionBroadcastGet(_type, hash, state, dbConf)
 
+	// Public
 	case "publicPeerListGet":
 		tagList := public.PublicPeerListGetParamConvert(params)
 		return public.PublicPeerListGet(tagList)
+
+	// Git
+	case "contriBox.backend.git.store":
+		_type, resourceEncrypted, xPub, state := git.StoreParamConvert(params)
+		return git.Store(_type, resourceEncrypted, xPub, state)
+
+	case "contribox.backend.git.peerAsk":
+		_type, xPub, depthMax, depth, state := git.PeerAskParamConvert(params)
+		return git.PeerAsk(_type, xPub, depthMax, depth, state)
+
+	case "contribox.backend.git.commitHashAsk":
+		_type, hash, xPub, state := git.CommitHashAskParamConvert(params)
+		return git.CommitHashAsk(_type, hash, xPub, state)
+
+	// Graph
+	case "contribox.backend.graph.store":
+		_type, trace, state := graph.StoreParamConvert(params)
+		return graph.Store(_type, trace, state)
+
+	case "contribox.backend.graph.peerAsk":
+		_type, xPub, depthMax, depth, state := graph.PeerAskParamConvert(params)
+		return graph.PeerAsk(_type, xPub, depthMax, depth, state)
+
+	// case "contribox.backend.graph.hashAsk":
+
+	// Blockchain
+	case "contribox.backend.blockchain.peerBlocValidation":
+		_type, contributionTxID, state := blockchain.PeerValidationParamConvert(params)
+		return blockchain.PeerBlocValidation(_type, contributionTxID, state)
+
+	case "contribox.backend.blockchain.peerPegValidation":
+		_type, contributionTxID, state := blockchain.PeerValidationParamConvert(params)
+		return blockchain.PeerPegValidation(_type, contributionTxID, state)
 
 	default:
 		return "Address not found", true

@@ -18,11 +18,9 @@ func GetProofByTemplateID(templateID int, dbConf DbConf) Proof {
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT p.Id, p.xPub, p.projectName, p.licenceSPDX, p.licenceSPDXChange, p.groupRoleName FROM %v.%v p INNER JOIN %v.%v tp ON p.Id = tp.proofId WHERE tp.templateId = %v",
-		dbConf.DbName,
-		proofTableName,
-		dbConf.DbName,
-		templateAndProofTableName,
+		"SELECT p.Id, p.xPub, p.projectName, p.licenceSPDX, p.licenceSPDXChange, p.groupRoleName FROM %v p INNER JOIN %v tp ON p.Id = tp.proofId WHERE tp.templateId = %v",
+		dbConf.DbName+"."+proofTableName,
+		dbConf.DbName+"."+templateAndProofTableName,
 		templateID,
 	)
 

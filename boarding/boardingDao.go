@@ -27,9 +27,8 @@ func GetTemplate(projectName string, licenceSPDX string, groupRoleName string, s
 		"SELECT t.Id, t.hash, t.projectName, t.licenceSPDX, t.groupRoleName, t.state, t.userRequirement, t.projectRequirement, "+
 			"t.userUser, t.userBackup, t.userLock, t.userWitness, "+
 			"t.projectOld, t.projectParent, t.projectBoard, t.projectMember, t.projectCosigner, t.projectWitness "+
-			"FROM %v.%v t WHERE t.projectName = '%v' AND t.licenceSPDX = '%v' AND t.groupRoleName = '%v' AND t.state = '%v'",
-		dbConf.DbName,
-		templatesTableName,
+			"FROM %v t WHERE t.projectName = '%v' AND t.licenceSPDX = '%v' AND t.groupRoleName = '%v' AND t.state = '%v'",
+		dbConf.DbName+"."+templatesTableName,
 		projectName,
 		licenceSPDX,
 		groupRoleName,
@@ -106,14 +105,11 @@ func GetTemplateByTypeXPubAndState(_type string, xPubS string, state string, dbC
 		"SELECT t.Id, t.hash, t.projectName, t.licenceSPDX, t.groupRoleName, t.state, t.userRequirement, t.projectRequirement, "+
 			"t.userUser, t.userBackup, t.userLock, t.userWitness, "+
 			"t.projectOld, t.projectParent, t.projectBoard, t.projectMember, t.projectCosigner, t.projectWitness "+
-			"FROM %v.%v t INNER JOIN %v.%v txp ON t.Id = txp.templateId INNER JOIN %v.%v xp ON txp.xPubId = xp.Id "+
+			"FROM %v t INNER JOIN %v txp ON t.Id = txp.templateId INNER JOIN %v xp ON txp.xPubId = xp.Id "+
 			"WHERE xp.xPub = '%v' AND t.state = '%v'",
-		dbConf.DbName,
-		templatesTableName,
-		dbConf.DbName,
-		templatesAndXPubsTableName,
-		dbConf.DbName,
-		xPubsTableName,
+		dbConf.DbName+"."+templatesTableName,
+		dbConf.DbName+"."+templatesAndXPubsTableName,
+		dbConf.DbName+"."+xPubsTableName,
 		xPubS,
 		state,
 	)

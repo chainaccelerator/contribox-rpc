@@ -63,6 +63,14 @@ type Hash struct {
 	Hash string
 }
 
+// IPv4 ...
+type IPv4 struct {
+	Part1 int
+	Part2 int
+	Part3 int
+	Part4 int
+}
+
 // IssueAsset ...
 type IssueAsset struct {
 	IssueAsset Hash
@@ -83,7 +91,7 @@ type KeyShared struct {
 // KeyVal ...
 type KeyVal struct {
 	Key string
-	Val map[string]interface{}
+	Val string
 }
 
 // Licence ...
@@ -214,6 +222,16 @@ type TemplateUser struct {
 type TimeStamp struct {
 	Time  int
 	Delay int
+}
+
+// Trace ...
+type Trace struct {
+	Hash            Hash
+	ProofMerkleTree []Hash
+	SigYes          []XPub
+	SigNo           []XPub
+	TransactionHash Hash
+	GitCommitHash   Hash
 }
 
 // TxId ...

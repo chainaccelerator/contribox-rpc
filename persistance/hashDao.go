@@ -18,11 +18,9 @@ func GetHashListByProofID(proofID int, dbConf DbConf) []Hash {
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT h.Id, h.hash, h.hashType FROM %v.%v h INNER JOIN %v.%v ph on h.Id = ph.hashId WHERE ph.proofId = %v",
-		dbConf.DbName,
-		hashesTableName,
-		dbConf.DbName,
-		proofsAndHashesTableName,
+		"SELECT h.Id, h.hash, h.hashType FROM %v h INNER JOIN %v ph on h.Id = ph.hashId WHERE ph.proofId = %v",
+		dbConf.DbName+"."+hashesTableName,
+		dbConf.DbName+"."+proofsAndHashesTableName,
 		proofID,
 	)
 	fmt.Println(query)

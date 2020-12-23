@@ -34,14 +34,11 @@ func GetContributionByXPubAndState(_type string, xPub string, state string, dbCo
 
 	query := fmt.Sprintf(
 		"SELECT c.Id, c.hash, c.xPub, c.tx1Id, c.tx0IdAmount, c.tx0IdIssueAsset, c.tx0IdSigA "+
-			"FROM %v.%v c INNER JOIN %v.%v ct on c.Id = ct.contributionId INNER JOIN %v.%v t on ct.templateId = t.Id "+
+			"FROM %v c INNER JOIN %v ct on c.Id = ct.contributionId INNER JOIN %v t on ct.templateId = t.Id "+
 			"WHERE c.xPub = '%v' AND t.state = '%v'",
-		dbConf.DbName,
-		contributionsTableName,
-		dbConf.DbName,
-		contributionsAndTemplatesTableName,
-		dbConf.DbName,
-		templatesTableName,
+		dbConf.DbName+"."+contributionsTableName,
+		dbConf.DbName+"."+contributionsAndTemplatesTableName,
+		dbConf.DbName+"."+templatesTableName,
 		xPub,
 		state,
 	)
@@ -77,14 +74,11 @@ func GetContributionByHashAndState(_type string, hash string, state string, dbCo
 
 	query := fmt.Sprintf(
 		"SELECT c.Id, c.hash, c.xPub, c.tx1Id, c.tx0IdAmount, c.tx0IdIssueAsset, c.tx0IdSigA "+
-			"FROM %v.%v c INNER JOIN %v.%v ct on c.Id = ct.contributionId INNER JOIN %v.%v t on ct.templateId = t.Id "+
+			"FROM %v c INNER JOIN %v ct on c.Id = ct.contributionId INNER JOIN %v t on ct.templateId = t.Id "+
 			"WHERE c.hash = '%v' AND t.state = '%v'",
-		dbConf.DbName,
-		contributionsTableName,
-		dbConf.DbName,
-		contributionsAndTemplatesTableName,
-		dbConf.DbName,
-		templatesTableName,
+		dbConf.DbName+"."+contributionsTableName,
+		dbConf.DbName+"."+contributionsAndTemplatesTableName,
+		dbConf.DbName+"."+templatesTableName,
 		hash,
 		state,
 	)
@@ -118,11 +112,9 @@ func GetProofByContributionID(contributionID int, dbConf persistance.DbConf) per
 
 	query := fmt.Sprintf(
 		"SELECT p.Id, p.xPub, p.projectName, p.licenceSPDX, p.licenceSPDXChange, p.groupRoleName "+
-			"FROM %.v%v p INNER JOIN %v.%v cp on p.Id = cp.proofId WHERE cp.contributionId = %v",
-		dbConf.DbName,
-		proofsTableName,
-		dbConf.DbName,
-		contributionsAndProofsTableName,
+			"FROM %v p INNER JOIN %v cp on p.Id = cp.proofId WHERE cp.contributionId = %v",
+		dbConf.DbName+"."+proofsTableName,
+		dbConf.DbName+"."+contributionsAndProofsTableName,
 		contributionID,
 	)
 	fmt.Println(query)
@@ -158,11 +150,9 @@ func GetTemplateByContributionID(contributionID int, dbConf persistance.DbConf) 
 		"SELECT t.Id, t.hash, t.projectName, t.licenceSPDX, t.groupRoleName, t.state, t.userRequirement, t.projectRequirement, "+
 			"t.userUser, t.userBackup, t.userLock, t.userWitness, "+
 			"t.projectOld, t.projectParent, t.projectBoard, t.projectMember, t.projectCosigner, t.projectWitness "+
-			"FROM %.v%v t INNER JOIN %v.%v ct on t.Id = ct.templateId WHERE ct.contributionId = %v",
-		dbConf.DbName,
-		templatesTableName,
-		dbConf.DbName,
-		contributionsAndTemplatesTableName,
+			"FROM %v t INNER JOIN %v ct on t.Id = ct.templateId WHERE ct.contributionId = %v",
+		dbConf.DbName+"."+templatesTableName,
+		dbConf.DbName+"."+contributionsAndTemplatesTableName,
 		contributionID,
 	)
 	fmt.Println(query)
@@ -207,9 +197,8 @@ func GetPubKeysByContributionID(contributionID int, dbConf persistance.DbConf) [
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT pk.* FROM %v.%v pk INNER JOIN %v.%v cpk on pk.Id = cpk.pubkeyId WHERE cpk.contributionId = %v",
-		dbConf.DbName,
-		pubKeysTableNames,
+		"SELECT pk.* FROM %v pk INNER JOIN %v.%v cpk on pk.Id = cpk.pubkeyId WHERE cpk.contributionId = %v",
+		dbConf.DbName+"."+pubKeysTableNames,
 		dbConf.DbName,
 		contributionsAndPubKeysTableNames,
 		contributionID,

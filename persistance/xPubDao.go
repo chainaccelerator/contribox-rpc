@@ -19,11 +19,9 @@ func GetXPubListByProofID(proofID int, dbConf DbConf) []XPub {
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT xp.* FROM %v.%v xp INNER JOIN %v.%v pxp on xp.Id = pxp.xpubId WHERE pxp.proofId = %v",
-		dbConf.DbName,
-		xPubsTableName,
-		dbConf.DbName,
-		proofsAndXPubsTableName,
+		"SELECT xp.* FROM %v xp INNER JOIN %v pxp on xp.Id = pxp.xpubId WHERE pxp.proofId = %v",
+		dbConf.DbName+"."+xPubsTableName,
+		dbConf.DbName+"."+proofsAndXPubsTableName,
 		proofID,
 	)
 
@@ -57,11 +55,9 @@ func GetXPubListByTemplateID(templateID int, dbConf DbConf) []XPub {
 	defer db.Close()
 
 	query := fmt.Sprintf(
-		"SELECT xp.Id, xp.xPub, xp.xPubType FROM %v.%v xp INNER JOIN %v.%v txp on xp.Id = txp.xpubId WHERE txp.templateId = %v",
-		dbConf.DbName,
-		xPubsTableName,
-		dbConf.DbName,
-		templatesAndXPubsTableName,
+		"SELECT xp.Id, xp.xPub, xp.xPubType FROM %v xp INNER JOIN %v txp on xp.Id = txp.xpubId WHERE txp.templateId = %v",
+		dbConf.DbName+"."+xPubsTableName,
+		dbConf.DbName+"."+templatesAndXPubsTableName,
 		templateID,
 	)
 	fmt.Println(query)

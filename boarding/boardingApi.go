@@ -37,6 +37,8 @@ func Boarding(_type string, resource commons.Template, state commons.StateReason
 	if !ValidateBoarding(_type, resource, state.Reason) {
 		return commons.StateReason{}, true
 	}
+	// Insert template
+	// Insert boarding
 	return commons.StateReason{Reason: "todo"}, false
 }
 

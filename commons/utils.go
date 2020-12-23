@@ -42,16 +42,16 @@ func BuildProof(proofParameter map[string]interface{}) Proof {
 	contributeList := keyValList(contributeListParam)
 
 	originListParam := proofParameter["originList"].([]interface{})
-	originList := hashList(originListParam)
+	originList := HashList(originListParam)
 
 	parentListParam := proofParameter["parentList"].([]interface{})
-	parentList := hashList(parentListParam)
+	parentList := HashList(parentListParam)
 
 	previousListParam := proofParameter["previousList"].([]interface{})
-	previousList := hashList(previousListParam)
+	previousList := HashList(previousListParam)
 
 	leftListParam := proofParameter["leftList"].([]interface{})
-	leftList := hashList(leftListParam)
+	leftList := HashList(leftListParam)
 
 	ndaListParam := proofParameter["ndaList"].([]interface{})
 	ndaList := keyValList(ndaListParam)
@@ -124,14 +124,15 @@ func keyValList(iList []interface{}) []KeyVal {
 		keyValParamJSON := keyValParam.(map[string]interface{})
 		keyVal := KeyVal{
 			Key: keyValParamJSON["key"].(string),
-			Val: keyValParamJSON["val"].(map[string]interface{}),
+			Val: keyValParamJSON["val"].(string),
 		}
 		keyValList = append(keyValList, keyVal)
 	}
 	return keyValList
 }
 
-func hashList(iList []interface{}) []Hash {
+// HashList ...
+func HashList(iList []interface{}) []Hash {
 	var hashList []Hash
 	for _, hashParam := range iList {
 		hashList = append(hashList, Hash{Hash: hashParam.(map[string]interface{})["hash"].(string)})
