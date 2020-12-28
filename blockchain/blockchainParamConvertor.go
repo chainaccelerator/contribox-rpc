@@ -4,8 +4,21 @@ import (
 	"bc_node_api/api3/commons"
 )
 
-// PeerValidationParamConvert ...
-func PeerValidationParamConvert(params []interface{}) (string, commons.TxId, commons.StateReason) {
+// BroadcastParamConvert ...
+func BroadcastParamConvert(params []interface{}) (string, commons.Transaction, commons.StateReason) {
+	_type := params[0].(string)
+
+	transactionParam := params[1].(map[string]interface{})
+	transaction := commons.Transaction{Transaction: transactionParam["transaction"].(string)}
+
+	stateParam := params[2].(map[string]interface{})
+	state := commons.StateReason{Reason: stateParam["reason"].(string)}
+
+	return _type, transaction, state
+}
+
+// PeerParamConvert ...
+func PeerParamConvert(params []interface{}) (string, commons.TxId, commons.StateReason) {
 	_type := params[0].(string)
 
 	contributionTxIDParam := params[1].(map[string]interface{})

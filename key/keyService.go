@@ -4,6 +4,7 @@ import (
 	"bc_node_api/api3/persistance"
 	"database/sql"
 	"fmt"
+	"strings"
 
 	// Used in conjunction with database/sql
 	_ "github.com/go-sql-driver/mysql"
@@ -21,25 +22,19 @@ func KeyShareDb(_type string, xPubSList []string, key string, hash string, state
 	}
 	defer db.Close()
 
-	// A corriger : mettre tout en une requête
+	query := fmt.Sprintf("INSERT INTO %v (`type`, `xPubS`, `key`, `hash`, `state`) VALUES ", dbConf.DbName+"."+keyTableName)
 	for _, xPubS := range xPubSList {
-		query := fmt.Sprintf(
-			"INSERT INTO %v (`type`, `xPubS`, `key`, `hash`, `state`) VALUES ('%v', '%v', '%v', '%v', '%v')",
-			dbConf.DbName+"."+keyTableName,
-			_type,
-			xPubS,
-			key,
-			hash,
-			state)
-		fmt.Println(query)
-
-		insert, err := db.Query(query)
-		if err != nil {
-			fmt.Println(err.Error())
-			return ""
-		}
-		insert.Close()
+		query += fmt.Sprintf("VALUES ('%v', '%v', '%v', '%v', '%v'), ", _type, xPubS, key, hash, state)
 	}
+	query = strings.TrimSuffix(query, ", ")
+	fmt.Println(query)
+
+	insert, err := db.Query(query)
+	if err != nil {
+		fmt.Println(err.Error())
+		return ""
+	}
+	insert.Close()
 
 	return state
 }

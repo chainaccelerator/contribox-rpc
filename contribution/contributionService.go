@@ -6,7 +6,21 @@ import (
 )
 
 // ContributionDb ...
-func ContributionDb(_type string, contribution commons.Contribution, state string, dbConf persistance.DbConf) commons.StateReason {
+func ContributionDb(_type string, fullContribution commons.Contribution, state string, dbConf persistance.DbConf) commons.StateReason {
+	contribution := persistance.Contribution{
+		Hash:            fullContribution.Hash.Hash,
+		XPub:            fullContribution.XPub.XPub,
+		Tx1Id:           fullContribution.Tx1Id.Id,
+		Tx0IdAmount:     fullContribution.Tx0IdAmount,
+		Tx0IdIssueAsset: fullContribution.Tx0IdIssueAsset.IssueAsset.Hash,
+		Tx0IdSigA:       fullContribution.Tx0IdSigA.Sig,
+	}
+
+	contributionID := InsertContribution(contribution, dbConf)
+	if contributionID == 0 {
+		return commons.StateReason{}
+	}
+
 	return commons.StateReason{}
 }
 

@@ -9,6 +9,7 @@ type Contribution struct {
 	Tx0IdAmount     int
 	Tx0IdIssueAsset string
 	Tx0IdSigA       string
+	State           string
 }
 
 // GroupName ...
@@ -49,6 +50,14 @@ type PubKey struct {
 	PubKey        string
 	Base58Encoded bool
 	PubKeyType    string
+}
+
+// Sig ...
+type Sig struct {
+	Id    int
+	Sig   string
+	XPub  string
+	XPubS string
 }
 
 // Tag ...

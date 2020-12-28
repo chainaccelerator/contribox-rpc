@@ -54,12 +54,13 @@ func ValidateTemplate(template Template) bool {
 // ValidateProof ...
 func ValidateProof(proof Proof) bool {
 	return ValidateGroupRoleName(proof.GroupRoleName.Name) &&
-		validateHashList(proof.ParentList) &&
-		validateHashList(proof.PreviousList) &&
-		validateHashList(proof.LeftList)
+		ValidateHashList(proof.ParentList) &&
+		ValidateHashList(proof.PreviousList) &&
+		ValidateHashList(proof.LeftList)
 }
 
-func validateHashList(hashList []Hash) bool {
+// ValidateHashList ...
+func ValidateHashList(hashList []Hash) bool {
 	for _, hash := range hashList {
 		if !ValidateKeyOrHash(hash.Hash) {
 			return false

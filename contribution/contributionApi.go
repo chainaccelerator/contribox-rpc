@@ -6,7 +6,7 @@ import (
 )
 
 // Contribution ...
-func Contribution(_type string, contribution commons.Contribution, state commons.StateReason, dbConf persistance.DbConf) (commons.StateReason, bool) {
+func Contribution(_type string, contribution commons.FullContribution, state commons.StateReason, dbConf persistance.DbConf) (commons.StateReason, bool) {
 	if !ValidateContribution(_type, contribution, state.Reason) {
 		return commons.StateReason{}, true
 	}
@@ -38,7 +38,7 @@ func ContributionConfirmGet(_type string, hash commons.Hash, state commons.State
 }
 
 // ContributionBroadcast ...
-func ContributionBroadcast(_type string, resourceList []commons.Contribution, hash commons.Hash, state commons.StateReason, dbConf persistance.DbConf) (commons.StateReason, bool) {
+func ContributionBroadcast(_type string, resourceList []commons.FullContribution, hash commons.Hash, state commons.StateReason, dbConf persistance.DbConf) (commons.StateReason, bool) {
 	if !ValidateContributionBroadcast(_type, resourceList, hash.Hash, state.Reason) {
 		return commons.StateReason{}, true
 	}

@@ -1,9 +1,13 @@
 package contribution
 
 import (
+	"bc_node_api/api3/commons"
 	"bc_node_api/api3/persistance"
 	"database/sql"
 	"fmt"
+
+	// Used in conjunction with database/sql
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const contributionsTableName = "contributions"
@@ -17,8 +21,100 @@ const templatesTableName = "templates"
 const xPubsTableName = "xpubs"
 
 // InsertContribution ...
-func InsertContribution(contribution persistance.Contribution) {
+func InsertContribution(contribution persistance.Contribution, dbConf persistance.DbConf) int {
+	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+	defer db.Close()
 
+	query := fmt.Sprintf(
+		"INSERT INTO %v (`hash`, `xPub`, `tx1Id`, `tx0IdAmount`, `tx0IdIssueAsset`, `tx0IdSigA`, `state`) VALUES ('%v', '%v', '%v', %v, '%v', '%v', '%v')",
+		dbConf.DbName+"."+contributionsTableName,
+		contribution.Hash,
+		contribution.XPub,
+		contribution.Tx1Id,
+		contribution.Tx0IdAmount,
+		contribution.Tx0IdIssueAsset,
+		contribution.Tx0IdSigA,
+		contribution.State,
+	)
+	fmt.Println(query)
+
+	insert, err := db.Exec(query)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+
+	lid, err := insert.LastInsertId()
+
+	return int(lid)
+}
+
+// InsertContributionProof ...
+func InsertContributionProof(contributionID int, proof persistance.Proof, dbConf persistance.DbConf) int {
+	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+	defer db.Close()
+
+	query := fmt.Sprintf(
+		"INSERT INTO %v (`xPub`, `projectName`, `licenceSPDX`, `licenceSPDXChange`, `groupRoleName`) VALUES ('%v', '%v', '%v', '%v', '%v')",
+		dbConf.DbName+"."+proofsTableName,
+		proof.XPub,
+		proof.ProjectName,
+		proof.LicenceSPDX,
+		proof.LicenceSPDXChange,
+		proof.GroupRoleName,
+	)
+	fmt.Println(query)
+
+	insert, err := db.Exec(query)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+
+	proofID, err := insert.LastInsertId()
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+
+	jointQuery := fmt.Sprintf(
+		"INSERT INTO %v (`contributionId`, `proofId`) VALUES (%v, %v)",
+		dbConf.DbName+"."+contributionsAndProofsTableName,
+		contributionID,
+		proofID,
+	)
+	fmt.Println(jointQuery)
+
+	jointInsert, err := db.Query(jointQuery)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+	jointInsert.Close()
+
+	return int(proofID)
+}
+
+// TODO : Insert all proof elements. KeyVals, XPubs, Hashes ...
+
+// InsertContributionPubKeys ...
+func InsertContributionPubKeys(contributionID, vout0PubKA commons.PubKey, vout1PubKS commons.PubKey, dbConf persistance.DbConf) bool {
+	db, err := sql.Open("mysql", dbConf.DbURL+dbConf.DbName)
+	if err != nil {
+		fmt.Println(err.Error())
+		return false
+	}
+	defer db.Close()
+
+	return true
 }
 
 // GetContributionByXPubAndState ...
@@ -34,11 +130,8 @@ func GetContributionByXPubAndState(_type string, xPub string, state string, dbCo
 
 	query := fmt.Sprintf(
 		"SELECT c.Id, c.hash, c.xPub, c.tx1Id, c.tx0IdAmount, c.tx0IdIssueAsset, c.tx0IdSigA "+
-			"FROM %v c INNER JOIN %v ct on c.Id = ct.contributionId INNER JOIN %v t on ct.templateId = t.Id "+
-			"WHERE c.xPub = '%v' AND t.state = '%v'",
+			"FROM %v c WHERE c.xPub = '%v' AND c.state = '%v'",
 		dbConf.DbName+"."+contributionsTableName,
-		dbConf.DbName+"."+contributionsAndTemplatesTableName,
-		dbConf.DbName+"."+templatesTableName,
 		xPub,
 		state,
 	)

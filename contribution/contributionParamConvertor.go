@@ -5,7 +5,7 @@ import (
 )
 
 // ContributionParamConvert ...
-func ContributionParamConvert(params []interface{}) (string, commons.Contribution, commons.StateReason) {
+func ContributionParamConvert(params []interface{}) (string, commons.FullContribution, commons.StateReason) {
 	_type := params[0].(string)
 
 	contributionParam := params[1].(map[string]interface{})
@@ -17,12 +17,18 @@ func ContributionParamConvert(params []interface{}) (string, commons.Contributio
 	return _type, contribution, state
 }
 
-func buildContribution(contributionParam map[string]interface{}) commons.Contribution {
+func buildContribution(contributionParam map[string]interface{}) commons.FullContribution {
 	hashParam := contributionParam["hash"].(map[string]interface{})
 	hash := commons.Hash{Hash: hashParam["hash"].(string)}
 
+	xPubParam := contributionParam["xPub"].(map[string]interface{})
+	xPub := commons.XPub{XPub: xPubParam["xPub"].(string)}
+
 	proofParam := contributionParam["proof"].(map[string]interface{})
 	proof := commons.BuildProof(proofParam)
+
+	templateParam := contributionParam["template"].(map[string]interface{})
+	template := commons.BuildTemplate(templateParam)
 
 	blindingKeyListParam := contributionParam["blindingKeyList"].([]interface{})
 	var blindingKeyList []commons.BlindingKeyEncrypted
@@ -37,18 +43,18 @@ func buildContribution(contributionParam map[string]interface{}) commons.Contrib
 		blindingKeyList = append(blindingKeyList, blindingKeyEncrypted)
 	}
 
-	rangeListParam := contributionParam["rangeList"].([]interface{})
-	var rangeList []commons.RangeEncrypted
-	for _, rangeParam := range rangeListParam {
-		rangeParamJSON := rangeParam.(map[string]interface{})
-		xPubParam := rangeParamJSON["xPub"].(map[string]interface{})
-		xPub := commons.XPub{XPub: xPubParam["xPub"].(string)}
-		rangeEncrypted := commons.RangeEncrypted{
-			XPub:   xPub,
-			String: rangeParamJSON["string"].(string),
-		}
-		rangeList = append(rangeList, rangeEncrypted)
-	}
+	// rangeListParam := contributionParam["rangeList"].([]interface{})
+	// var rangeList []commons.RangeEncrypted
+	// for _, rangeParam := range rangeListParam {
+	// 	rangeParamJSON := rangeParam.(map[string]interface{})
+	// 	xPubParam := rangeParamJSON["xPub"].(map[string]interface{})
+	// 	xPub := commons.XPub{XPub: xPubParam["xPub"].(string)}
+	// 	rangeEncrypted := commons.RangeEncrypted{
+	// 		XPub:   xPub,
+	// 		String: rangeParamJSON["string"].(string),
+	// 	}
+	// 	rangeList = append(rangeList, rangeEncrypted)
+	// }
 
 	onBoardingParam := contributionParam["onBoarding"].(map[string]interface{})
 	onBoarding := commons.BuildBoarding(onBoardingParam)
@@ -81,11 +87,12 @@ func buildContribution(contributionParam map[string]interface{}) commons.Contrib
 		Base58Encoded: vout1PubKSParam["base58Encoded"].(bool),
 	}
 
-	return commons.Contribution{
-		Hash:            hash,
-		Proof:           proof,
-		BlindKeyList:    blindingKeyList,
-		RangeList:       rangeList,
+	contribution := commons.Contribution{
+		Hash:         hash,
+		XPub:         xPub,
+		Proof:        proof,
+		BlindKeyList: blindingKeyList,
+		// RangeList:       rangeList,
 		OnBoarding:      onBoarding,
 		OutBoarding:     outBoarding,
 		Tx1Id:           tx1Id,
@@ -94,6 +101,11 @@ func buildContribution(contributionParam map[string]interface{}) commons.Contrib
 		Tx0IdSigA:       tx0IdSigA,
 		Vout0PubKA:      vout0PubKA,
 		Vout1PubKS:      vout1PubKS,
+	}
+
+	return commons.FullContribution{
+		Contribution: contribution,
+		Template:     template,
 	}
 }
 
@@ -129,11 +141,11 @@ func ContributionConfirmGetParamConvert(params []interface{}) (string, commons.H
 }
 
 // ContributionBroadcastParamConvert ...
-func ContributionBroadcastParamConvert(params []interface{}) (string, []commons.Contribution, commons.Hash, commons.StateReason) {
+func ContributionBroadcastParamConvert(params []interface{}) (string, []commons.FullContribution, commons.Hash, commons.StateReason) {
 	_type := params[0].(string)
 
 	resourceListParam := params[1].([]interface{})
-	var resourceList []commons.Contribution
+	var resourceList []commons.FullContribution
 	for _, resourceParam := range resourceListParam {
 		resourceList = append(resourceList, buildContribution(resourceParam.(map[string]interface{})))
 	}

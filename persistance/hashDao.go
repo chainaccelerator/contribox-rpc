@@ -3,6 +3,9 @@ package persistance
 import (
 	"database/sql"
 	"fmt"
+
+	// Used in conjunction with database/sql
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const hashesTableName = "hashes"

@@ -5,15 +5,15 @@ import (
 )
 
 // ValidateContribution ...
-func ValidateContribution(_type string, contribution commons.Contribution, state string) bool {
+func ValidateContribution(_type string, contribution commons.FullContribution, state string) bool {
 	return _type == "default" && validateContribution(contribution) && state == "todo"
 }
 
-func validateContribution(contribution commons.Contribution) bool {
+func validateContribution(contribution commons.FullContribution) bool {
 	return commons.ValidateKeyOrHash(contribution.Hash.Hash) &&
 		commons.ValidateProof(contribution.Proof) &&
 		validateBlindKeyList(contribution.BlindKeyList) &&
-		validateRangeList(contribution.RangeList) &&
+		// validateRangeList(contribution.RangeList) &&
 		commons.ValidateBoarding(contribution.OnBoarding) &&
 		commons.ValidateBoarding(contribution.OutBoarding) &&
 		commons.ValidateTX(contribution.Tx1Id.Id) &&
@@ -58,11 +58,11 @@ func ValidateContributionConfirmGet(_type string, hash string, state string) boo
 }
 
 // ValidateContributionBroadcast ...
-func ValidateContributionBroadcast(_type string, resourceList []commons.Contribution, hash string, state string) bool {
+func ValidateContributionBroadcast(_type string, resourceList []commons.FullContribution, hash string, state string) bool {
 	return _type == "default" && validateContributionList(resourceList) && commons.ValidateKeyOrHash(hash) && state == "done"
 }
 
-func validateContributionList(contributionList []commons.Contribution) bool {
+func validateContributionList(contributionList []commons.FullContribution) bool {
 	for _, contribution := range contributionList {
 		if !validateContribution(contribution) {
 			return false

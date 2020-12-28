@@ -19,6 +19,20 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Request ...
+type Request struct {
+	Jsonrpc string        `json:"jsonrpc"`
+	ID      string        `json:"id"`
+	Method  string        `json:"method"`
+	Params  []interface{} `json:"params"`
+}
+
+// Response ...
+type Response struct {
+	Success interface{}
+	Error   bool
+}
+
 var appURL string
 var dbURL string
 var dbName string
@@ -60,70 +74,70 @@ func handleAddress(address string, params []interface{}) (interface{}, bool) {
 	switch address {
 
 	// Key
-	case "keyShare":
+	case "contriBox.sdk.endpoint.keyShare":
 		_type, keyShared, state := key.KeyShareParamConvert(params)
 		return key.KeyShare(_type, keyShared, state, dbConf)
 
-	case "keyShareGet":
+	case "contriBox.sdk.endpoint.keyShareGet":
 		_type, xPubS, state := key.KeyShareGetParamConvert(params)
 		return key.KeyShareGet(_type, xPubS, state, dbConf)
 
-	case "keyShareConfirm":
+	case "contriBox.sdk.endpoint.keyShareConfirm":
 		_type, resource, hash, state := key.KeyShareConfirmParamConvert(params)
 		return key.KeyShareConfirm(_type, resource, hash, state, dbConf)
 
-	case "keyShareConfirmGet":
+	case "contriBox.sdk.endpoint.keyShareConfirmGet":
 		_type, hash, state := key.KeyShareConfirmGetParamConvert(params)
 		return key.KeyShareConfirmGet(_type, hash, state, dbConf)
 
 	// Boarding
-	case "boardingTemplateGet":
+	case "contriBox.sdk.endpoint.boardingTemplateGet":
 		projectName, licenceSPDX, groupRoleName, onBoarding, outBoarding, hash, state := boarding.BoardingTemplateGetParamConvert(params)
 		return boarding.BoardingTemplateGet(projectName, licenceSPDX, groupRoleName, onBoarding, outBoarding, hash, state, dbConf)
 
-	case "boarding":
+	case "contriBox.sdk.endpoint.boarding":
 		_type, resource, state := boarding.BoardingParamConvert(params)
 		return boarding.Boarding(_type, resource, state, dbConf)
 
-	case "boardingGet":
+	case "contriBox.sdk.endpoint.boardingGet":
 		_type, xPubS, state := boarding.BoardingGetParamConvert(params)
 		return boarding.BoardingGet(_type, xPubS, state, dbConf)
 
-	case "boardingBroadcast":
+	case "contriBox.sdk.endpoint.boardingBroadcast":
 		_type, resourceList, hash, state := boarding.BoardingBroadcastParamConvert(params)
 		return boarding.BoardingBroadcast(_type, resourceList, hash, state, dbConf)
 
-	case "boardingBroadcastGet":
+	case "contriBox.sdk.endpoint.boardingBroadcastGet":
 		_type, hash, state := boarding.BoardingBroadcastGetParamConvert(params)
 		return boarding.BoardingBroadcastGet(_type, hash, state, dbConf)
 
 	// Contribution
-	case "contribution":
+	case "contriBox.sdk.endpoint.contribution":
 		_type, _contribution, state := contribution.ContributionParamConvert(params)
 		return contribution.Contribution(_type, _contribution, state, dbConf)
 
-	case "contributionGet":
+	case "contriBox.sdk.endpoint.contributionGet":
 		_type, xPubS, state := contribution.ContributionGetParamConvert(params)
 		return contribution.ContributionGet(_type, xPubS, state, dbConf)
 
-	case "contributionConfirm":
+	case "contriBox.sdk.endpoint.contributionConfirm":
 		_type, sig, hash, xPub, resourceEncrypted, state := contribution.ContributionConfirmParamConvert(params)
 		return contribution.ContributionConfirm(_type, sig, hash, xPub, resourceEncrypted, state, dbConf)
 
-	case "contributionConfirmGet":
+	case "contriBox.sdk.endpoint.contributionConfirmGet":
 		_type, hash, state := contribution.ContributionConfirmGetParamConvert(params)
 		return contribution.ContributionConfirmGet(_type, hash, state, dbConf)
 
-	case "contributionBroadcast":
+	case "contriBox.sdk.endpoint.contributionBroadcast":
 		_type, resourceList, hash, state := contribution.ContributionBroadcastParamConvert(params)
 		return contribution.ContributionBroadcast(_type, resourceList, hash, state, dbConf)
 
-	case "contributionBroadcastGet":
+	case "contriBox.sdk.endpoint.contributionBroadcastGet":
 		_type, hash, state := contribution.ContributionBroadcastGetParamConvert(params)
 		return contribution.ContributionBroadcastGet(_type, hash, state, dbConf)
 
 	// Public
-	case "publicPeerListGet":
+	case "contriBox.sdk.endpoint.publicPeerListGet":
 		tagList := public.PublicPeerListGetParamConvert(params)
 		return public.PublicPeerListGet(tagList)
 
@@ -149,32 +163,28 @@ func handleAddress(address string, params []interface{}) (interface{}, bool) {
 		_type, xPub, depthMax, depth, state := graph.PeerAskParamConvert(params)
 		return graph.PeerAsk(_type, xPub, depthMax, depth, state)
 
-	// case "contribox.backend.graph.hashAsk":
+	case "contribox.backend.graph.hashAsk":
+		_type, trace, state := graph.HashAskParamConvert(params)
+		return graph.HashAsk(_type, trace, state)
 
 	// Blockchain
+	case "contriBox.backend.blockchain.broadcast":
+		_type, transaction, state := blockchain.BroadcastParamConvert(params)
+		return blockchain.Broadcast(_type, transaction, state)
+
+	case "contriBox.backend.blockchain.peerAsk":
+		_type, txID, state := blockchain.PeerParamConvert(params)
+		return blockchain.PeerAsk(_type, txID, state)
+
 	case "contribox.backend.blockchain.peerBlocValidation":
-		_type, contributionTxID, state := blockchain.PeerValidationParamConvert(params)
+		_type, contributionTxID, state := blockchain.PeerParamConvert(params)
 		return blockchain.PeerBlocValidation(_type, contributionTxID, state)
 
 	case "contribox.backend.blockchain.peerPegValidation":
-		_type, contributionTxID, state := blockchain.PeerValidationParamConvert(params)
+		_type, contributionTxID, state := blockchain.PeerParamConvert(params)
 		return blockchain.PeerPegValidation(_type, contributionTxID, state)
 
 	default:
 		return "Address not found", true
 	}
-}
-
-// Request ...
-type Request struct {
-	Jsonrpc string        `json:"jsonrpc"`
-	ID      string        `json:"id"`
-	Method  string        `json:"method"`
-	Params  []interface{} `json:"params"`
-}
-
-// Response ...
-type Response struct {
-	Success interface{}
-	Error   bool
 }

@@ -21,11 +21,12 @@ type Boarding struct {
 
 // Contribution ...
 type Contribution struct {
-	Hash            Hash
-	XPub            XPub
-	Proof           Proof
-	BlindKeyList    []BlindingKeyEncrypted
-	RangeList       []RangeEncrypted
+	Hash         Hash
+	XPub         XPub
+	Proof        Proof
+	BlindKeyList []BlindingKeyEncrypted
+	// TODO : voir plus tard si on prend en compte
+	// RangeList       []RangeEncrypted
 	OnBoarding      Boarding
 	OutBoarding     Boarding
 	Tx1Id           TxId
@@ -232,6 +233,11 @@ type Trace struct {
 	SigNo           []XPub
 	TransactionHash Hash
 	GitCommitHash   Hash
+}
+
+// Transaction ...
+type Transaction struct {
+	Transaction string
 }
 
 // TxId ...
