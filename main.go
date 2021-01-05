@@ -15,6 +15,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -41,8 +42,13 @@ var dbConf persistance.DbConf
 
 func main() {
 	fmt.Println("Blockchain node API")
+
+	// We're excluding the path to the program
+	args := os.Args[1:]
+	env := args[0]
+
 	// Import config
-	config := config.GetConfig()
+	config := config.GetConfig(env)
 	appURL = config.AppURL
 	dbURL = config.DbURL
 	dbName = config.DbName

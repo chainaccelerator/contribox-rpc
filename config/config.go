@@ -5,8 +5,6 @@ import (
 	"os"
 )
 
-const configPath = "config/config.development.json"
-
 // Config ...
 type Config struct {
 	AppURL string
@@ -15,8 +13,8 @@ type Config struct {
 }
 
 // GetConfig ...
-func GetConfig() Config {
-	file, err := os.Open(configPath)
+func GetConfig(env string) Config {
+	file, err := os.Open("config/config." + env + ".json")
 	decoder := json.NewDecoder(file)
 	var configuration Config
 	err = decoder.Decode(&configuration)
